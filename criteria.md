@@ -55,35 +55,27 @@ in at least 4 of 5 tries.
 
 ---
 
-## 4. No chunk cuts a sentence in half
+## 4. Conflicting advice surfaces multiple viewpoints
 
-At least 4 of 5 sampled chunks read as a complete thought, with no sentence
-cut in half at either end.
+For questions with conflicting advice (like "should I get a bike?"),
+the system retrieves chunks from at least 2 different replies —
+in at least 3 of my 5 test questions.
 
 **Why this target:**
-The Harbourmaster corpus is made of short rule-explanation documents where
-each fact (e.g. "you take two actions") lives in one or two sentences. A chunk
-that ends mid-sentence loses the number or keyword the question is about, so
-retrieval can find the chunk but the answer inside it is incomplete. Allowing
-one miss out of five accounts for edge cases at file boundaries.
+Multiple replies in the advice_threads corpus often contradict each other. A good chunker should surface different viewpoints so that users see a well-rounded answer instead of just one person's opinion. I allow 2 questions to return only one reply because some topics may only have a single commenter.
 
 
 
 ---
 
-## 5. Correct source attribution
+## 5. High-voted replies appear in retrieved chunks
 
-For at least 4 of 5 test questions, the source file named in the answer
-actually contains the fact the answer states.
+The system distinguishes between strongly-upvoted replies and weak ones.
+For at least 4 of 5 questions, if the top-ranked reply has 15+ votes,
+it appears in the retrieved chunks.
 
 **Why this target:**
-The system prompt tells the model to name which document it used, and
-criterion 2 checks that it names *something*. But naming a source is useless
-if the source is wrong — the reader would look it up, not find the fact, and
-lose trust. Since all five questions ask for a specific number from a specific
-rule, checking whether the cited file contains that number is straightforward.
-Allowing one miss covers cases where the answer draws from two files and only
-names the less specific one.
+In Reddit-style threads, vote counts reflect community endorsement. I don't want the system to surface a 5-vote niche opinion while ignoring a 22-vote mainstream recommendation. This matters a lot for practical helpfulness. I allow 1 failure because sometimes the highest-voted reply may not be the most relevant to the specific question.
 
 
 
