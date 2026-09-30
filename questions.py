@@ -22,11 +22,11 @@ names a target of "4 of 5", and four of three is not a thing.
 """
 
 QUESTIONS = [
-    {"question": "How many actions does a player take on their turn in Harbourmaster?", "expects": "two"},
-    {"question": "What determines who goes first in a game of Harbourmaster?", "expects": "fish"},
-    {"question": "How many coins do you earn for selling cargo to a port that accepts it?", "expects": "two"},
-    {"question": "What is the maximum number of cargo cards a player's hold can contain?", "expects": "three"},
-    {"question": "How many points is a completed contract worth?", "expects": "three"},
+    {"question": "How much does the printing quota cover in black-and-white pages?", "expects": "600"},
+    {"question": "How much do commuter lounge lockers cost per year?", "expects": "20"},
+    {"question": "How much RAM do students recommend for CS courses?", "expects": "16"},
+    {"question": "What is the latest week you can declare pass/fail?", "expects": "8"},
+    {"question": "What are the best days of the week to do laundry on campus?", "expects": "Tuesday"},
 ]
 
 # Questions from a different world entirely. Your gate should refuse all five.
