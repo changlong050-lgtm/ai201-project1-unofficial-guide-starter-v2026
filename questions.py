@@ -22,12 +22,11 @@ names a target of "4 of 5", and four of three is not a thing.
 """
 
 QUESTIONS = [
-    # {"question": "...", "expects": "..."},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
+    {"question": "How many actions does a player take on their turn in Harbourmaster?", "expects": "two"},
+    {"question": "What determines who goes first in a game of Harbourmaster?", "expects": "fish"},
+    {"question": "How many coins do you earn for selling cargo to a port that accepts it?", "expects": "two"},
+    {"question": "What is the maximum number of cargo cards a player's hold can contain?", "expects": "three"},
+    {"question": "How many points is a completed contract worth?", "expects": "three"},
 ]
 
 # Questions from a different world entirely. Your gate should refuse all five.
