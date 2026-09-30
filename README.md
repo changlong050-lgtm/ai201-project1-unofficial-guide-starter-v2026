@@ -1,19 +1,7 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
-
-> **This file is your submission.** Fill it in as you go — most sections get
-> written during the milestone that produces them, not at the end.
->
-> How the starter works, and every command you'll need, is in `RUNNING.md`.
-> Leave that file alone.
->
-> **Paste everything as text.** No screenshots, no video. A typed table gets
-> full credit; a picture of the same table gets none.
->
-> Delete these instruction blocks as you replace them. The `<!-- -->` comments
-> are notes to you and don't show up when the page renders — you can leave them
-> or remove them.
+**Name:** Changlong
+**Corpus:** `advice_threads`
 
 ---
 
@@ -21,26 +9,16 @@
 
 ## What This Does
 
-<!-- Three or four sentences. Which corpus you picked, and the kinds of
-     questions your system answers. Write it for someone who has never seen
-     this repo.
-
-     Milestone 5. -->
+This system uses the `advice_threads` corpus, a collection of Reddit-style discussion threads where students ask and answer practical campus-life questions. Users can ask advice-oriented questions — things like how much RAM they need for CS courses, whether a bike is worth it for commuting, or what the printing quota covers — and the system retrieves relevant replies from the threads and generates an answer with source attribution. If a question falls outside what the corpus covers, the relevance gate refuses it instead of guessing.
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** N/A (not using fixed-size chunks)
+**Overlap:** N/A
 
-<!-- What about YOUR documents made you pick these numbers? Short posts and
-     long sectioned guides don't want the same chunking, and "800 seemed
-     reasonable" earns nothing. Point at something you noticed when you read
-     the documents in Milestone 1.
+I replaced the default fixed-size chunker with reply-boundary splitting. Each document in `advice_threads` is a discussion thread with a title line (`THREAD: ...`) followed by individual replies separated by `--- reply N ---` markers. Instead of cutting at a fixed character count, my chunker splits on those reply markers so each chunk is exactly one reply. It prepends the thread title to every chunk so each one stands alone — a chunk that says "16 is the answer" makes no sense without knowing the thread asked "How much laptop do I actually need for CS courses?"
 
-     If you changed your mind partway through, say so and say why. That's worth
-     more than pretending you got it right first time.
-
-     Milestone 3. -->
+I chose this because the advice threads are structured as short, self-contained replies. A fixed-size window would either keep a short reply intact anyway (wasting nothing) or cut a longer reply mid-sentence. Splitting on reply boundaries keeps every reply whole and avoids the mid-sentence cuts that the fallback chunker produced.
 
 ## Sample Chunks
 
@@ -95,45 +73,40 @@ The library being open until 2am is a trap. It's a resource, not a schedule.
 
 ## Sample Answer
 
-<!-- One complete question and answer, pasted as text, with the source line
-     visible. Milestone 4. -->
-
-**Question:**
+**Question:** How much do commuter lounge lockers cost per year?
 
 **Answer:**
 
 ```
+Commuter lounge lockers cost $20 a year, according to `thread_commuting.txt`.
+
+Sources retrieved: thread_bike_commute.txt, thread_commuting.txt, thread_laundry_timing.txt, thread_printing.txt, thread_study_spots.txt
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** 0.65
 
-<!-- The number you set in config.py, and how you got there.
+I set the cutoff to 0.65 in `config.py`. When I ran my five in-corpus questions, the best distances were all well below 0.65 (around 0.62–0.64 at the highest). The five out-of-scope questions all landed above 0.83. There is a clear gap between the two groups, so 0.65 sits comfortably in the middle.
 
-     You ran five questions your corpus covers and the five in OUT_OF_SCOPE
-     that it clearly doesn't, and wrote down the best distance for each. What
-     did those two groups look like? Where was the gap? Put the actual numbers
-     here — the table below wants all ten rows.
-
-     Milestone 4. -->
+I originally had the cutoff at a slightly different value, and one of my test questions was getting refused even though the answer was in the corpus. The best distance for that question was around 0.64, which was just above my original cutoff. Once I moved the cutoff to 0.65, it passed the gate correctly.
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| How much does the printing quota cover in black-and-white pages? | Yes | 0.392 |
+| How much do commuter lounge lockers cost per year? | Yes | 0.621 |
+| How much RAM do students recommend for CS courses? | Yes | 0.246 |
+| What is the latest week you can declare pass/fail? | Yes | 0.499 |
+| What are the best days of the week to do laundry on campus? | Yes | 0.501 |
+| What is the capital of Mongolia? | No | 0.961 |
+| How do I change the oil in a diesel engine? | No | 0.873 |
+| Who won the 1994 World Cup? | No | 0.860 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.875 |
+| How do I write a for loop in Rust? | No | 0.838 |
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+**1.** One of my test questions was returning "I don't have enough information about that" even though I knew the answer was in the corpus. I asked AI to help me understand why. It explained that the relevance gate compares the best retrieval distance against the cutoff threshold, and if the distance is above the cutoff the question gets refused. I checked my distances and found the best distance for that question was around 0.64, but my cutoff was set too tight. I changed the threshold in `config.py` to 0.65 and the question started getting answered correctly.
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.**
-
-**2.**
+**2.** I used AI to help me write this README. I described the basic ideas I wanted to include — which corpus I picked, that I chunk by reply boundaries instead of fixed size, and the two AI-use moments — and asked it to help me turn those notes into complete sentences. I reviewed the output and adjusted wording to match what actually happened.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
