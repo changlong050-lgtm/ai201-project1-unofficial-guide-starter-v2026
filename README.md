@@ -53,44 +53,44 @@
 
      Milestone 3. -->
 
-**Chunk 1** — source: source: thread_bike_commute.txt#0 `` — produced by: `chunker.py::fallback_split`
+**Chunk 1** — source: `thread_bike_commute.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
 THREAD: Is a bike worth it for a 20 minute walk commute?
 
---- reply 1 (14 votes) ---
 Yeah. Cuts an 18 minute walk to about 6. The thing nobody mentions is storage — covered bike parking exists at three buildings and is full by 9am at all three.
-
---- reply 2 (9 votes) ---
-Counterpoint, I sold mine. Between November and March the paths are either icy or salted and salt destroys a drivetrain in one season.
-
---- reply 3 (22 votes) ---
-Both true. I keep a cheap bike for September to November and walk the rest of the year. Total cost was about $120 for the bike and I don't care what happens to it.
-
---- reply 4 (5 votes) ---
-If you do get one, the campus does free registration and it's the only reason I got mine back after it was taken.
-
-
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `thread_first_gen.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+THREAD: Anything specific for first-generation students?
+
+The thing I'd say: the unwritten rules are the hard part, not the coursework. Ask about the unwritten rules explicitly. People are happy to explain them and nobody volunteers them.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: `thread_laptop_specs.txt#2` — produced by: `chunker.py::split_documents`
 
 ```
+THREAD: How much laptop do I actually need for CS courses?
+
+I did two years on an 8GB machine and it was fine until the last project, at which point it very much wasn't. 16 is the answer.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: `thread_parking.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+THREAD: Worth getting a parking permit?
+
+Street parking on Verrill is legal and free and unmarked, which is why half the upper years do it.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: `thread_sleep_schedule.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+THREAD: Everyone says fix your sleep. Does it actually matter?
+
+The library being open until 2am is a trap. It's a resource, not a schedule.
 ```
 
 ## Sample Answer
