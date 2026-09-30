@@ -55,41 +55,35 @@ in at least 4 of 5 tries.
 
 ---
 
-## 4. Something about your chunks
+## 4. No chunk cuts a sentence in half
 
-<!-- YOU WRITE THIS ONE.
-
-     How would you know if your chunks were the right size? Name something
-     countable or observable.
-
-     Examples of the right shape — don't copy these, they should come from
-     what you actually saw in Milestone 3:
-       - "At least 4 of 5 sampled chunks read as a complete thought, with no
-          sentence cut in half at either end."
-       - "No chunk is shorter than 200 characters, since anything below that
-          in my corpus turned out to be a heading with no content under it." -->
-
-
+At least 4 of 5 sampled chunks read as a complete thought, with no sentence
+cut in half at either end.
 
 **Why this target:**
+The Harbourmaster corpus is made of short rule-explanation documents where
+each fact (e.g. "you take two actions") lives in one or two sentences. A chunk
+that ends mid-sentence loses the number or keyword the question is about, so
+retrieval can find the chunk but the answer inside it is incomplete. Allowing
+one miss out of five accounts for edge cases at file boundaries.
 
 
 
 ---
 
-## 5. Your choice
+## 5. Correct source attribution
 
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. It could be about
-     speed, about refusals, about a particular kind of question your corpus
-     handles badly, about source attribution being correct rather than merely
-     present — anything, as long as it names a number or an observable
-     outcome. -->
-
-
+For at least 4 of 5 test questions, the source file named in the answer
+actually contains the fact the answer states.
 
 **Why this target:**
+The system prompt tells the model to name which document it used, and
+criterion 2 checks that it names *something*. But naming a source is useless
+if the source is wrong — the reader would look it up, not find the fact, and
+lose trust. Since all five questions ask for a specific number from a specific
+rule, checking whether the cited file contains that number is straightforward.
+Allowing one miss covers cases where the answer draws from two files and only
+names the less specific one.
 
 
 

@@ -147,15 +147,77 @@
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. No chunk cuts a sentence in half | 4 of 5 | 3/5 | 3/5 | 3/5 | MISSED |
+| 5. Correct source attribution | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
 
-<!-- Underneath, paste the REAL output for each criterion from one of your
-     runs — the actual text your system produced, not a description of it.
-     Name the file and function that produced it. -->
+### Criterion 1 — Retrieved chunk contains the answer
+
+File: `results/run_2026-09-29_2204_before.md`, produced by `run_eval.py::main` and `store.py::search`.
+
+All five questions retrieved chunks containing the answer in every run. For example, run 1 of "How many actions does a player take on their turn in Harbourmaster?" retrieved `board_game_turn.txt` (best distance 0.3305) and the answer was:
+
+```
+On a turn in Harbourmaster, a player takes exactly two actions. 
+
+Source: board_game_turn.txt
+```
+
+### Criterion 2 — Every answer names a source
+
+File: `results/run_2026-09-29_2204_before.md`, produced by `generate.py::answer_from_chunks`.
+
+Every answer across all three runs names at least one source document. For example, run 1 of "How many coins do you earn for selling cargo to a port that accepts it?":
+
+```
+You earn two coins for selling cargo to a port that accepts it. 
+
+Source: `board_game_ports.txt` (also mentioned in `board_game_rules_walkthrough.txt`)
+```
+
+### Criterion 3 — Gate stops out-of-corpus questions
+
+File: `results/run_2026-09-29_2204_before.md`, produced by `run_eval.py::check_out_of_scope` and `gate.py::check`.
+
+All five out-of-scope questions were refused. The gate is deterministic, so one pass is the whole measurement:
+
+| Out-of-scope question | Best distance | Gate |
+|---|---|---|
+| What is the capital of Mongolia? | 0.961 | refused |
+| How do I change the oil in a diesel engine? | 0.873 | refused |
+| Who won the 1994 World Cup? | 0.860 | refused |
+| What is the recommended dosage of ibuprofen for a headache? | 0.875 | refused |
+| How do I write a for loop in Rust? | 0.838 | refused |
+
+### Criterion 4 — No chunk cuts a sentence in half
+
+Produced by `chunker.py::split_documents` (which currently calls `chunker.py::fallback_split`).
+
+Sampled five chunks from the index. Three read as complete thoughts; two were cut mid-sentence by the fixed-size window. Example of a cut chunk (`board_game_house_rules.txt#3`, 181 chars):
+
+```
+sing the hold limit from three to four also does not work: cargo is
+the constraint the whole game is built around, and removing it removes most of
+the reason to plan a route at all.
+```
+
+This starts mid-word ("sing" is the tail of "Raising"). Score: 3/5 across all runs since chunking is deterministic.
+
+### Criterion 5 — Correct source attribution
+
+File: `results/run_2026-09-29_2204_before.md`, produced by `generate.py::answer_from_chunks`.
+
+All five answers cite a source that actually contains the stated fact. For example, run 1 of "What is the maximum number of cargo cards a player's hold can contain?":
+
+```
+The maximum number of cargo cards a player's hold can contain is three, as the hold limit applies at all times. 
+
+Source: board_game_faq.txt
+```
+
+The file `board_game_faq.txt` does contain the hold-limit rule. Score: 5/5 across all runs.
 
 ## Verdicts
 
